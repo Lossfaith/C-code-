@@ -38,10 +38,12 @@ namespace FirstGame
     {
         PlayerType[,] grid;
         PlayerType move;
+        public int n;
 
         public XandO()
         {
-            grid = new PlayerType[3, 3];
+            n = Convert.ToInt32(Console.ReadLine());
+            grid = new PlayerType[n, n];
             for (int i = 0; i < grid.GetLength(0); i++)
             {
                 for (int j = 0; j < grid.GetLength(1); j++)
@@ -50,81 +52,70 @@ namespace FirstGame
                 }
             }
             move = PlayerType.PlayerX;
-        }
+        }        
         public PlayerType GetCellInfo(int i, int j)
         {
             return grid[i, j];
         }
+        
         public PlayerType WhoWins()
         {
-            if ((grid[0, 0] == PlayerType.PlayerX) && (grid[0, 1] == PlayerType.PlayerX) && (grid[0, 2] == PlayerType.PlayerX))
+            
+            for (int i = 0; i < grid.GetLength(0); i++)
+            {
+                int value1 = 0;
+                int value2 = 0;
+                for (int j = 0; j < grid.GetLength(1); j++)
+                {
+                    if (grid[i,j]==PlayerType.PlayerX)
+                    {
+                        value1++;
+                    }
+                    else if (grid[i,j]==PlayerType.PlayerO)
+                    {
+                        value1--;
+                    }
+                    if (grid[j, i] == PlayerType.PlayerX)
+                    {
+                        value2++;
+                    }
+                    else if (grid[j, i] == PlayerType.PlayerO)
+                    {
+                        value2--;
+                    }
+                }
+                if (n == value1||n==value2)
+                {
+                    return PlayerType.PlayerX;
+                }
+                else if (n == -value1||n==-value2)
+                {
+                    return PlayerType.PlayerO;
+                }               
+            }
+
+            int valueDiagonal=0;
+
+            for (int i = 0; i < n; i++)
+            {
+                if (grid[i,i]==PlayerType.PlayerX)
+                {
+                    valueDiagonal++;
+                }
+                else if (grid[i, i] == PlayerType.PlayerO)
+                {
+                    valueDiagonal--;
+                }
+            }
+            if (n==valueDiagonal)
             {
                 return PlayerType.PlayerX;
             }
-            else if ((grid[0, 0] == PlayerType.PlayerO) && (grid[0, 1] == PlayerType.PlayerO) && (grid[0, 2] == PlayerType.PlayerO))
-            {
-                return PlayerType.PlayerO;
-            }
-            if ((grid[1, 0] == PlayerType.PlayerX) && (grid[1, 1] == PlayerType.PlayerX) && (grid[1, 2] == PlayerType.PlayerX))
-            {
-                return PlayerType.PlayerX;
-            }
-            else if ((grid[1, 0] == PlayerType.PlayerO) && (grid[1, 1] == PlayerType.PlayerO) && (grid[1, 2] == PlayerType.PlayerO))
-            {
-                return PlayerType.PlayerO;
-            }
-            if ((grid[2, 0] == PlayerType.PlayerX) && (grid[2, 1] == PlayerType.PlayerX) && (grid[2, 2] == PlayerType.PlayerX))
-            {
-                return PlayerType.PlayerX;
-            }
-            else if ((grid[2, 0] == PlayerType.PlayerO) && (grid[2, 1] == PlayerType.PlayerO) && (grid[2, 2] == PlayerType.PlayerO))
+            else if (n==-valueDiagonal)
             {
                 return PlayerType.PlayerO;
             }
 
-
-            if ((grid[0, 0] == PlayerType.PlayerX) && (grid[1, 0] == PlayerType.PlayerX) && (grid[2, 0] == PlayerType.PlayerX))
-            {
-                return PlayerType.PlayerX;
-            }
-            else if ((grid[0, 0] == PlayerType.PlayerO) && (grid[1, 0] == PlayerType.PlayerO) && (grid[2, 0] == PlayerType.PlayerO))
-            {
-                return PlayerType.PlayerO;
-            }
-            if ((grid[0, 1] == PlayerType.PlayerX) && (grid[1, 1] == PlayerType.PlayerX) && (grid[2, 1] == PlayerType.PlayerX))
-            {
-                return PlayerType.PlayerX;
-            }
-            else if ((grid[0, 1] == PlayerType.PlayerO) && (grid[1, 1] == PlayerType.PlayerO) && (grid[2, 1] == PlayerType.PlayerO))
-            {
-                return PlayerType.PlayerO;
-            }
-            if ((grid[0, 2] == PlayerType.PlayerX) && (grid[1, 2] == PlayerType.PlayerX) && (grid[2, 2] == PlayerType.PlayerX))
-            {
-                return PlayerType.PlayerX;
-            }
-            else if ((grid[0, 2] == PlayerType.PlayerO) && (grid[1, 2] == PlayerType.PlayerO) && (grid[2, 2] == PlayerType.PlayerO))
-            {
-                return PlayerType.PlayerO;
-            }
-
-
-            if ((grid[0, 0] == PlayerType.PlayerX) && (grid[1, 1] == PlayerType.PlayerX) && (grid[2, 2] == PlayerType.PlayerX))
-            {
-                return PlayerType.PlayerX;
-            }
-            else if ((grid[0, 0] == PlayerType.PlayerO) && (grid[1, 1] == PlayerType.PlayerO) && (grid[2, 2] == PlayerType.PlayerO))
-            {
-                return PlayerType.PlayerO;
-            }
-            if ((grid[0, 2] == PlayerType.PlayerX) && (grid[1, 1] == PlayerType.PlayerX) && (grid[2, 0] == PlayerType.PlayerX))
-            {
-                return PlayerType.PlayerX;
-            }
-            else if ((grid[0, 2] == PlayerType.PlayerO) && (grid[1, 1] == PlayerType.PlayerO) && (grid[2, 0] == PlayerType.PlayerO))
-            {
-                return PlayerType.PlayerO;
-            }
 
             for (int i = 0; i < grid.GetLength(0); i++)
             {
@@ -178,23 +169,24 @@ namespace FirstGame
                 return true;
             }
         }
+
     }
 
     class Program
     {
-        static int ValueXY()
+        static int ValueXY(int N)
         {
             int xy = -1;
-            while (xy < 0 || xy > 2)
+            while (xy < 0 || xy >= N )
             {
                 try
                 {
                     
                     xy = Convert.ToInt32(Console.ReadKey(true).KeyChar.ToString());
                     Console.WriteLine();
-                    if (xy < 0 || xy > 2)
+                    if (xy < 0 || xy > N)
                     {
-                        Console.WriteLine("Нельзя вводить цифры больше 2 или меньше 0!");
+                        Console.WriteLine("Нельзя вводить цифры больше поля или меньше 0!");
                     }
                 }
                 catch
@@ -208,13 +200,14 @@ namespace FirstGame
         
         static void Main(string[] args)
         {
+            Console.WriteLine("ВВедите размер поля");
             XandO Game = new XandO();
 
             void Repeat()
             {
-                for (int a = 0; a < 3; a++)
+                for (int a = 0; a < Game.n; a++)
                 {
-                    for (int b = 0; b < 3; b++)
+                    for (int b = 0; b < Game.n; b++)
                     {
                         Console.Write("  " + Game.GetCellInfo(a, b).ToPureString());
                     }
@@ -223,7 +216,7 @@ namespace FirstGame
             }
             Repeat();
 
-
+            
             while (Game.WhoWins() == PlayerType.None)
             {
                 var i = -1;
@@ -232,9 +225,9 @@ namespace FirstGame
                 {
                     Console.WriteLine("ВВедите x и y");
                     Console.Write("x:");
-                    i = ValueXY();
+                    i = ValueXY(Game.n);
                     Console.Write("y:");
-                    j = ValueXY();
+                    j = ValueXY(Game.n);
                 }
                 Game.MakeMove(i, j);
                 Repeat();
