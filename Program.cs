@@ -42,7 +42,21 @@ namespace FirstGame
 
         public XandO()
         {
-            n = Convert.ToInt32(Console.ReadLine());
+            while (n<3)
+            {
+                try
+                {
+                    n = Convert.ToInt32(Console.ReadLine());
+                    if (n<3)
+                    {
+                        Console.WriteLine("Нельзя ввести поле меньше 3");
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Нельзя вводить буквы");
+                }
+            }
             grid = new PlayerType[n, n];
             for (int i = 0; i < grid.GetLength(0); i++)
             {
