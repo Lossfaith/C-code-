@@ -38,16 +38,17 @@ namespace FirstGame
     {
         PlayerType[,] grid;
         PlayerType move;
-        public int n;
+        public int size;
+        private int emulateSize;
 
         public XandO()
         {
-            while (n<3)
+            while (size<3)
             {
                 try
                 {
-                    n = Convert.ToInt32(Console.ReadLine());
-                    if (n<3)
+                    size = Convert.ToInt32(Console.ReadLine());
+                    if (size<3)
                     {
                         Console.WriteLine("Нельзя ввести поле меньше 3");
                     }
@@ -57,7 +58,7 @@ namespace FirstGame
                     Console.WriteLine("Нельзя вводить буквы");
                 }
             }
-            grid = new PlayerType[n, n];
+            grid = new PlayerType[size, size];
             for (int i = 0; i < grid.GetLength(0); i++)
             {
                 for (int j = 0; j < grid.GetLength(1); j++)
@@ -98,19 +99,21 @@ namespace FirstGame
                         value2--;
                     }
                 }
-                if (n == value1||n==value2)
+                if (size == value1||size==value2)
                 {
                     return PlayerType.PlayerX;
                 }
-                else if (n == -value1||n==-value2)
+                else if (size == -value1||size==-value2)
                 {
                     return PlayerType.PlayerO;
                 }               
             }
 
             int valueDiagonal=0;
+            int valueBreackDiagonal = 0;
+            emulateSize = size;
 
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < size; i++)
             {
                 if (grid[i,i]==PlayerType.PlayerX)
                 {
@@ -120,12 +123,21 @@ namespace FirstGame
                 {
                     valueDiagonal--;
                 }
+                if (grid[i, emulateSize] == PlayerType.PlayerX)
+                {
+                    valueBreackDiagonal++;
+                }
+                else if (grid[i, emulateSize] == PlayerType.PlayerO)
+                {
+                    valueBreackDiagonal--;
+                }
+                emulateSize--;
             }
-            if (n==valueDiagonal)
+            if (size==valueDiagonal||size==valueBreackDiagonal)
             {
                 return PlayerType.PlayerX;
             }
-            else if (n==-valueDiagonal)
+            else if (size==-valueDiagonal||size==-valueBreackDiagonal)
             {
                 return PlayerType.PlayerO;
             }
@@ -198,9 +210,9 @@ namespace FirstGame
                     
                     xy = Convert.ToInt32(Console.ReadKey(true).KeyChar.ToString());
                     Console.WriteLine();
-                    if (xy < 0 || xy > N)
+                    if (xy < 0 || xy >=N)
                     {
-                        Console.WriteLine("Нельзя вводить цифры больше поля или меньше 0!");
+                        Console.WriteLine($"Нельзя вводить цифры больше {N} или меньше 0!");
                     }
                 }
                 catch
@@ -219,9 +231,9 @@ namespace FirstGame
 
             void Repeat()
             {
-                for (int a = 0; a < Game.n; a++)
+                for (int a = 0; a < Game.size; a++)
                 {
-                    for (int b = 0; b < Game.n; b++)
+                    for (int b = 0; b < Game.size; b++)
                     {
                         Console.Write("  " + Game.GetCellInfo(a, b).ToPureString());
                     }
@@ -239,9 +251,9 @@ namespace FirstGame
                 {
                     Console.WriteLine("ВВедите x и y");
                     Console.Write("x:");
-                    i = ValueXY(Game.n);
+                    i = ValueXY(Game.size);
                     Console.Write("y:");
-                    j = ValueXY(Game.n);
+                    j = ValueXY(Game.size);
                 }
                 Game.MakeMove(i, j);
                 Repeat();
